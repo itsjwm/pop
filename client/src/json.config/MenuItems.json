@@ -1,0 +1,17 @@
+[
+  {
+    "icon": "location_off",
+    "title": "222Test"
+  },
+  {
+    "icon": "build",
+    "title": "Configuration",
+    "submenu": [
+      {
+        "icon": "location_on",
+        "title": "Servers",
+        "action": "servers"
+      }
+    ]
+  }
+]
