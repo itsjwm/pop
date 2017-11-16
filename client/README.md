@@ -2,6 +2,13 @@
 
 > A Vue.js project
 
+## Prequisites
+
+node version v8.9.1
+npm version 5.5.1
+git version 2.14.1
+
+
 ## Build Setup
 
 ``` bash
