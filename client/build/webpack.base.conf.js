@@ -12,6 +12,9 @@ module.exports = {
   entry: {
     app: './src/main.js'
   },
+  externals: {
+    Primus: 'Primus'
+  },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',

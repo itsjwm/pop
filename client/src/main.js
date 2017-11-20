@@ -8,7 +8,13 @@ import './stylus/main.styl'
 import App from './App'
 import router from './router'
 
+// import Primus from 'Primus'
+import Primus from './plugins/primus'
+// Vue.prototype.$primus = new Primus('http://localhost:8081');
+// Vue.prototype.$primus = primus;
+
 Vue.use(Vuetify)
+Vue.use(Primus, 'http://localhost:8081')
 
 Vue.config.productionTip = false
 
