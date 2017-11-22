@@ -11,3 +11,4 @@ primus
 postgrapql
 
 proppvue
+rename back to pop
