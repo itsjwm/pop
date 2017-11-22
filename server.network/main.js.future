@@ -1,0 +1,59 @@
+'use strict';
+
+var Primus = require('primus');
+var http = require('http');
+const postgraphql = require('./vendor/postgraphql/build/').postgraphql;
+const createPostGraphQLSchema = require('./vendor/postgraphql/build/').createPostGraphQLSchema;
+const withPostGraphQLContext = require('./vendor/postgraphql/build/').withPostGraphQLContext;
+
+var Pool = require('pg-pool');
+var graphql = require('graphql');
+
+var pgPool = new Pool();
+
+// postgraphql -c "postgres://itsjwm:itsjwm@localhost:5432/pop" --watch
+
+var server = http.createServer(postgraphql('postgres://itsjwm:itsjwm@localhost:5432/pop', 'public', {graphiql: true, watchPg: true}));
+var primus = new Primus(server, { transformer: 'uws' });
+
+primus.on('error', function error(err) {
+	console.error('ERROR', err.stack);
+});
+
+console.log("Calling create");
+ createPostGraphQLSchema('postgres://itsjwm:itsjwm@localhost:5432/pop', 'public', {graphiql: true, watchPG: true})
+   .then(schema => {
+	console.log("primus on");
+	primus.on('connection', function (socket) {
+		socket.on('graphql', function ping(message) {
+			console.log('recieved graphql message', message);
+			const result = await withPostGraphQLContext(
+				  {
+					      pgPool: myPgPool,
+					      pgDefaultRole: 'itsjwm
+					    },
+				  async context => {
+					  // You execute your GraphQL query in this function with the provided `context` object.
+					  // The `context` object will not work for a GraphQL execution outside of this function.
+					  return await graphql(
+					  myPostGraphQLSchema, // This is the schema we created with `createPostGraphQLSchema`.
+					  query,
+					  null,
+					  { ...context }, // Here we use the `context` object that gets passed to this callback.
+					  variables,
+					  operationName,
+					  )
+					  }
+					  )
+			socket.write({ data: message });
+		});
+	})
+
+	server.listen(8081); // And listen on the HTTP server
+	console.log("Listening on 8081");
+   })
+   .catch(error => {
+   	throw new Error('ERROR: createPostGraphQLSchema');
+   })
+
+

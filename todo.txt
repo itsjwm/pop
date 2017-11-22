@@ -1,4 +1,0 @@
-use https in primus
-make website/ports config files
-make binary transmissios
-

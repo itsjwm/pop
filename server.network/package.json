@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "node main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "graphql": "^0.11.7",
+    "pg": "^7.4.0",
+    "pg-pool": "^2.0.3",
+    "postgraphql": "^3.5.1",
+    "primus": "^7.1.0",
+    "uws": "^8.14.1"
+  }
+}
