@@ -2,5 +2,12 @@ use https in primus
 make website/ports config files
 make binary transmissios
 
-npm install -g postgraphql
+#?? npm install -g postgraphql
 
+vue
+postres
+vuetify
+primus
+postgrapql
+
+proppvue
