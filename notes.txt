@@ -1,6 +1,7 @@
 use https in primus
 make website/ports config files
 make binary transmissios
+change server.network to use function.md (main.js.future).  In the meantime - we will use fetch
 
 #?? npm install -g postgraphql
 
