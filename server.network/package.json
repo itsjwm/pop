@@ -3,17 +3,27 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "node main.js",
+    "start": "nodemon lib/index.js --exec babel-node --presets es2015,stage-2",
+    "build": "babel lib -d dist --presets es2015,stage-2",
+    "serve": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "graphql": "^0.11.7",
+    "node-rest-client": "^3.1.0",
     "pg": "^7.4.0",
     "pg-pool": "^2.0.3",
     "postgraphql": "^3.5.1",
     "primus": "^7.1.0",
     "uws": "^8.14.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "nodemon": "^1.12.1"
   }
 }

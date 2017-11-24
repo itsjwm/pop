@@ -6,7 +6,9 @@ const postgraphql = require('./vendor/postgraphql/build/').postgraphql;
 const createPostGraphQLSchema = require('./vendor/postgraphql/build/').createPostGraphQLSchema;
 const withPostGraphQLContext = require('./vendor/postgraphql/build/').withPostGraphQLContext;
 
-var Pool = require('pg-pool');
+// var Pool = require('pg-pool');
+import { Pool } from 'pg-pool'
+
 var graphql = require('graphql');
 
 var pgPool = new Pool();
