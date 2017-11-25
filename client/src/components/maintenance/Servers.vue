@@ -34,7 +34,7 @@
 <script>
 
 var data = {
-id: "5542",
+    id: "5542",
     server: "serverName"
 };
 

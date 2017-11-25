@@ -2,14 +2,44 @@
 
 var Primus = require('primus');
 var http = require('http');
-const postgraphql = require('postgraphql').postgraphql;
-var Client = require('node-rest-client').Client;
-var client = new Client();
-import { Pool } from 'pg-pool'
 
-// postgraphql -c "postgres://itsjwm:itsjwm@localhost:5432/pop" --watch
+const { Pool } = require('pg');
+// const { graphql } = require('graphql');
+// const { withPostGraphQLContext } = require('postgraphile');
+// const http = require('http');
+// const { postgraphile } = require('postgraphile')
 
-var server = http.createServer(postgraphql('postgres://itsjwm:itsjwm@localhost:5432/pop', 'public', {graphiql: true, watchPg: true}));
+// Create Postgres connection
+var pool = new Pool({
+  user: 'itsjwm',
+  password: 'itsjwm',
+  host: 'localhost',
+  port: 5432,
+  ssl: false,
+  database: 'pop',
+  max: 20, // set pool max size to 20
+  min: 2, // set min pool size to 4
+  idleTimeoutMillis: 1000, // close idle clients after 1 second
+  connectionTimeoutMillis: 1000, // return an error after 1 second if connection could not be established
+})
+
+var mypool = new Pool(pool)
+
+pool.connect((err, client, release) => {
+  if (err) {
+    return console.error('Error acquiring client', err.stack)
+  }
+  client.query('SELECT NOW()', (err, result) => {
+    release()
+    if (err) {
+      return console.error('Error executing query', err.stack)
+    }
+    console.log(result.rows)
+  })
+})
+// Create Postgres connection
+
+var server = http.createServer();
 var primus = new Primus(server, { transformer: 'uws' });
 
 primus.on('error', function error(err) {
@@ -17,43 +47,10 @@ primus.on('error', function error(err) {
 });
 
 primus.on('connection', function (socket) {
-	console.log("connection");
 	socket.on('data', function ping(message) {
 		console.log('recieved a new message', message);
-		var msg = process_graphql_request(message, socket);
+		socket.write({ data: message });
 	});
 });
 
-server.listen(8081); // And listen on the HTTP server
-console.log("Listening on 8081");
-
-// This the function will likely change.  For now - we use post
-function process_graphql_request (req, socket) {
-	var body = '{ allServers { edges { node { id } } }   }';
-
-	var options = {
-	  "method": "PUT",
-	  "uri": "127.0.0.1",
-	  "path": "/graphql/",
-	  "headers": { 
-	    "Content-Type" : "application/json",
-	  }
-	}
-	var opts = JSON.stringify(options);
-
-	http.request(opts, httpcallback(socket)).end(body);
-};
-
-function httpcallback (response, socket) {
-	var str = ''
-	console.log("callback called with: response");
-	response.on('data', function(chunk){
-		str += chunk
-		console.log("response.on with ", str);
-	})
-
-	response.on('end', function(){
-		console.log("sending:", str)
-		socket.write(str)
-	  })
-}
+server.listen(8081);
